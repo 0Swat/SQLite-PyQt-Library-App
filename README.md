@@ -1,6 +1,9 @@
 
 # Library Management System
 
+![obraz](https://github.com/0Swat/SQLite-PyQt-Library-App/assets/94014791/eb04cff6-9044-4f0b-97ad-7989e8018355)
+
+
 ## Overview
 
 This project is a PyQt5-based desktop application for managing a library system. It allows users to manage books, people, and borrowed books within the library. The application connects to an SQLite database to store and retrieve data.
@@ -22,11 +25,11 @@ This project is a PyQt5-based desktop application for managing a library system.
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/library-management-system.git
+    git clone https://github.com/0Swat/SQLite-PyQt-Library-App.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd library-management-system
+    cd SQLite-PyQt-Library-App
     ```
 3. Install the required packages:
     ```bash
