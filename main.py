@@ -1,98 +1,83 @@
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 import sys
 
 class MyCalculator(QMainWindow):
     def __init__(self):
         super(MyCalculator, self).__init__()
-        self.setGeometry(200, 200, 800, 500)
+        self.setGeometry(200, 200, 1200, 800)
         self.setWindowTitle("Biblioteka")
-        self.setFixedSize(800, 500)
+        self.setFixedSize(1200, 800)
 
-        self.DB()
+        
+
         self.initUI()
 
-    def DB(self):
-        self.con = QSqlDatabase.addDatabase("QSQLITE")
-        self.con.setDatabaseName("library.sqlite")
-        if not self.con.open():
-            QMessageBox.critical(self, "Database Error", "Unable to connect to the database")
-            sys.exit(1)
-
-        createTableQuery = QSqlQuery()
-        createTableQuery.exec(
-            """
-            CREATE TABLE `ksiazki` (
-            `id` integer PRIMARY KEY,
-            `tytul` varchar(255),
-            `autor_imie` varchar(255),
-            `autor_nazwisko` varchar(255),
-            `gatunek` varchar(255)
-            );
-            """
-        )
-        createTableQuery.exec(
-            """
-            CREATE TABLE `osoby` (
-            `id` integer PRIMARY KEY,
-            `imie` varchar(255),
-            `nazwisko` varchar(255)
-            );
-            """
-        )
-        createTableQuery.exec(
-            """
-            CREATE TABLE `wypozyczenia` (
-            `id` integer,
-            `id_osoby` integer,
-            `id_ksiazki` integer
-            );
-            """
-        )
-        createTableQuery.exec(
-            """
-            ALTER TABLE `wypozyczenia` ADD FOREIGN KEY (`id_ksiazki`) REFERENCES `ksiazki` (`id`);
-            """
-        )
-        createTableQuery.exec(
-            """
-            ALTER TABLE `wypozyczenia` ADD FOREIGN KEY (`id_osoby`) REFERENCES `osoby` (`id`);
-            """
-        )
-
-        id = 1
-        imie = "Oskar"
-        nazwisko = "Swat"
-
-        query = QSqlQuery()
-        query.exec(
-            f"""INSERT INTO osoby (id, imie, nazwisko)
-            VALUES ('{id}', '{imie}', '{nazwisko}')"""
-        )
-        query.exec(
-            f"""INSERT INTO ksiazki (id, tytul, autor_imie, autor_nazwisko, gatunek)
-            VALUES ('1', 'Krzyzacy', 'Boleslaw', 'Prus', 'historyczne')"""
-        )
-        query.exec(
-            f"""INSERT INTO wypozyczenia (id, id_osoby, id_ksiazki)
-            VALUES ('1', '1', '1')"""
-        )
-
-
     def initUI(self):
-        self.tableWidget = QTableWidget(self)
-        self.tableWidget.setGeometry(10, 10, 780, 480)
-        self.tableWidget.setColumnCount(5)  # Liczba kolumn odpowiadająca tabeli `osoby`
-        self.tableWidget.setHorizontalHeaderLabels(["ID", "Imię", "Nazwisko", "Tytuł Książki", "Gatunek"])
+        self.AreaOne()
+        return
+    
+    def AreaOne(self):
+        self.label1 = QtWidgets.QLabel(self)
+        self.label1.setGeometry(QtCore.QRect(0, 0, 300, 50))
+        self.label1.setAlignment(QtCore.Qt.AlignCenter)
+        self.label1.setText("Książki")
+        self.label1.setStyleSheet("color: black; border: 1px solid #ccc;")
+        self.label1.setFont(QtGui.QFont('Arial', 22))
 
-        query = QSqlQuery("SELECT osoby.id, osoby.imie, osoby.nazwisko, ksiazki.tytul, ksiazki.gatunek FROM osoby JOIN wypozyczenia ON osoby.id = wypozyczenia.id_osoby JOIN ksiazki ON ksiazki.id = wypozyczenia.id_ksiazki")
-        row = 0
-        while query.next():
-            self.tableWidget.insertRow(row)
-            for i in range(5):
-                self.tableWidget.setItem(row, i, QTableWidgetItem(str(query.value(i))))
-            row += 1
+        self.textBrowser1 = QtWidgets.QTextBrowser(self)
+        self.textBrowser1.setGeometry(QtCore.QRect(0, 50, 300, 350))
+        self.textBrowser1.setObjectName("textBrowser")
+
+        self.label2 = QtWidgets.QLabel(self)
+        self.label2.setGeometry(QtCore.QRect(300, 0, 300, 50))
+        self.label2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label2.setText("No data connection")
+        self.label2.setStyleSheet("color: black; border: 1px solid #ccc;")
+        self.label2.setFont(QtGui.QFont('Arial', 14))
+
+        self.label3 = QtWidgets.QLabel(self)
+        self.label3.setGeometry(QtCore.QRect(300, 50, 300, 30))
+        self.label3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label3.setText("Wprowadź tytuł")
+        self.label3.setStyleSheet("color: black; border: 1px solid #ccc;")
+        self.label3.setFont(QtGui.QFont('Arial', 8))
+
+        self.lineEdit1 = QtWidgets.QLineEdit(self)
+        self.lineEdit1.setGeometry(QtCore.QRect(300, 80, 300, 30))
+
+        self.label4 = QtWidgets.QLabel(self)
+        self.label4.setGeometry(QtCore.QRect(300, 120, 300, 30))
+        self.label4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label4.setText("Wprowadź autora")
+        self.label4.setStyleSheet("color: black; border: 1px solid #ccc;")
+        self.label4.setFont(QtGui.QFont('Arial', 8))
+
+        self.lineEdit2 = QtWidgets.QLineEdit(self)
+        self.lineEdit2.setGeometry(QtCore.QRect(300, 150, 300, 30))
+
+        self.label5 = QtWidgets.QLabel(self)
+        self.label5.setGeometry(QtCore.QRect(300, 190, 300, 30))
+        self.label5.setAlignment(QtCore.Qt.AlignCenter)
+        self.label5.setText("Wprowadź gatunek")
+        self.label5.setStyleSheet("color: black; border: 1px solid #ccc;")
+        self.label5.setFont(QtGui.QFont('Arial', 8))
+
+        self.lineEdit3 = QtWidgets.QLineEdit(self)
+        self.lineEdit3.setGeometry(QtCore.QRect(300, 220, 300, 30))
+
+        self.pushButton_1 = QtWidgets.QPushButton(self)
+        self.pushButton_1.setGeometry(QtCore.QRect(300, 250, 150, 150))
+        self.pushButton_1.setText("Dodaj")
+
+        self.pushButton_2 = QtWidgets.QPushButton(self)
+        self.pushButton_2.setGeometry(QtCore.QRect(450, 250, 150, 150))
+        self.pushButton_2.setText("Usuń")
+
+
 
 def window():
     app = QApplication(sys.argv)
